@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, LoadingController, NavController, NavParams } from 'ionic-angular';
+import { RoyalEstateApiProvider } from '../../providers/royal-estate-api/royal-estate-api';
 import { EstatesPage } from '../estates/estates';
 
 /**
@@ -16,15 +17,34 @@ import { EstatesPage } from '../estates/estates';
 })
 export class LocationsPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  locations: any;
+
+  constructor(public navCtrl: NavController, 
+    public navParams: NavParams,
+    public royalEstateApi: RoyalEstateApiProvider,
+    public loadingController: LoadingController) {
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad LocationsPage');
+
+    let loader = this.loadingController.create({
+      content: 'Getting locations...'
+    });
+
+    loader.present().then(() => {
+      this.royalEstateApi.getLocations().subscribe(
+        locations => {
+          this.locations = locations;
+          loader.dismiss();
+      });
+    });
+
   }
 
-  itemTapped() {
-    this.navCtrl.push(EstatesPage);
+  itemTapped($event, location) {
+    console.log("item tapped" + location);
+    this.navCtrl.push(EstatesPage, location);
   }
 
 }

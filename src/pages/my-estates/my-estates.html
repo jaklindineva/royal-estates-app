@@ -19,6 +19,58 @@
 
 </ion-header>
 
-<ion-content padding>
-  <button ion-button (click)="goToLocations()">Find a Location</button>
+<ion-content>
+
+  <ion-card *ngIf="!saved">
+    <ion-card-header>No Saved Estates</ion-card-header>
+    <ion-card-content>
+        <p>You don't have any saves estates yet.</p>
+        <p>First select a location, then you can save estates from their estate overview page.</p>
+        <button ion-button (click)="goToLocations()" icon-left full>
+            <ion-icon name="search"></ion-icon>
+            Find a Location
+        </button>
+    </ion-card-content>
+  </ion-card>
+
+<ion-card *ngIf="saved">
+  <ion-list>
+    <ion-list-header>Saved Estates</ion-list-header>
+
+   <button ion-item *ngFor="let item of saved" (click)="savedTapped($event, item)">
+      <ion-row>
+        <ion-col>
+          <div>
+            <ion-thumbnail>
+              <img [src]="item.estate.image">
+            </ion-thumbnail>
+          </div>
+        </ion-col>
+        <ion-col>
+          Ref No.{{item.estate.refNumber}}
+          <p>{{item.estate.type}}, {{item.estate.bedrooms}} bedrooms</p>
+          <br>
+          <p>{{item.locationName}}, {{item.estate.region}}</p>
+        </ion-col>
+        <ion-col>
+          <br>
+          <br>
+          <h3 ion-text color="primary">VIEW</h3>
+        </ion-col>
+      </ion-row>
+
+    </button>
+
+  </ion-list>
+
+  <ion-card-content>
+    <p>To save more estates, select a location, then you can save estates from their estate overview page.</p>
+
+    <button ion-button (click)="goToLocations()" icon-left full>
+      <ion-icon name="search"></ion-icon>
+      Find a Location
+    </button>
+  </ion-card-content>
+</ion-card>
+
 </ion-content>

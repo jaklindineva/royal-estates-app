@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, LoadingController, NavController, NavParams } from 'ionic-angular';
+import { RoyalEstateApiProvider } from '../../providers/royal-estate-api/royal-estate-api';
 import { EstateHomePage } from '../estate-home/estate-home';
+import * as _ from 'lodash';
 
 /**
  * Generated class for the EstatesPage page.
@@ -16,16 +18,42 @@ import { EstateHomePage } from '../estate-home/estate-home';
 })
 export class EstatesPage {
 
-  estates: any = [
-    {id: 1, refNumber: '00001'},
-    {id: 2, refNumber: '00002'},
-  ];
+  estates: any = [];
+  selectedLocation: any;
+  private allEstates: any;
+  private allEstatesRegions: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public navCtrl: NavController, 
+              public navParams: NavParams,
+              public royalEstateApi: RoyalEstateApiProvider,
+              public loadingController: LoadingController) {
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad EstatesPage');
+
+    this.selectedLocation = this.navParams.data;
+
+    let loader = this.loadingController.create({
+      content: 'Getting data...'
+    });
+
+    loader.present().then(() => {
+      this.royalEstateApi.getLoactionData(this.selectedLocation.id).subscribe(data => {
+        this.allEstates = data.estates;
+        // subdivide the estates into regions
+        this.allEstatesRegions =
+          _.chain(data.estates)
+          .groupBy('region')
+          .toPairs()
+          .map(item => _.zipObject(['regionName', 'regionEstates'], item))
+          .value();
+          this.estates = this.allEstatesRegions;
+
+          loader.dismiss();   
+      });
+    });
+
   }
 
   itemTapped($event, estate) {

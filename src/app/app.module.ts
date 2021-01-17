@@ -9,6 +9,8 @@ import { ListPage } from '../pages/list/list';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { EstateHomePage, EstatesPage, LocationsPage, MapPage, MyEstatesPage, OverviewPage, SimilarPage } from '../pages/pages';
+import { RoyalEstateApiProvider } from '../providers/royal-estate-api/royal-estate-api';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -26,6 +28,7 @@ import { EstateHomePage, EstatesPage, LocationsPage, MapPage, MyEstatesPage, Ove
   imports: [
     BrowserModule,
     IonicModule.forRoot(MyApp),
+    HttpClientModule,
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -43,7 +46,8 @@ import { EstateHomePage, EstatesPage, LocationsPage, MapPage, MyEstatesPage, Ove
   providers: [
     StatusBar,
     SplashScreen,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    RoyalEstateApiProvider
   ]
 })
 export class AppModule {}

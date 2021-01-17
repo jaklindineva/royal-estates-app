@@ -11,7 +11,9 @@
 </ion-header>
 
 <ion-content padding>
-  <button ion-item (click)="itemTapped()">Sofia</button>
-  <button ion-item (click)="itemTapped()">Plovdiv</button>
-
+  
+  <button ion-item *ngFor="let location of locations" (click)="itemTapped($event, location)">
+   {{location.name}}
+  </button>
+  
 </ion-content>
