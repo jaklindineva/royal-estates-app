@@ -6,7 +6,7 @@
 -->
 <ion-header>
   <ion-navbar color="primary">
-    <ion-title>{{estate.refNumber}}</ion-title>
+    <ion-title>Ref. No {{estate.refNumber}}</ion-title>
     <ion-buttons end>
       <button ion-button icon-only (click)="goHome()">
           <ion-icon name="home"></ion-icon>
@@ -15,7 +15,7 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
+<ion-content>
   <ion-tabs>
     <ion-tab tabTitle="Overview" [root]="overviewTab"  [rootParams]="{estate: estate}" tabIcon="information-circle"></ion-tab>
     <ion-tab tabTitle="Map" [root]="mapTab" [rootParams]="{estate: estate}" tabIcon="map"></ion-tab>

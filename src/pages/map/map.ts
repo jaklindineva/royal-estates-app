@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { RoyalEstateApiProvider } from '../../providers/royal-estate-api/royal-estate-api';
 
+declare var window: any;
 /**
  * Generated class for the MapPage page.
  *
@@ -15,11 +17,22 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class MapPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  map: any = {};
+
+  constructor(public navCtrl: NavController, public navParams: NavParams, public royalEstateApi: RoyalEstateApiProvider) {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad MapPage');
+    let estate  = this.navParams.data.estate;
+    this.map = {
+      lat: estate.latitude,
+      lng: estate.longitude,
+      zoom: 12
+    };
+  }
+
+  getDirections() { 
+    window.location = `geo:${this.map.lat},${this.map.lng};u=35`; 
   }
 
 }

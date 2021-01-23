@@ -12,6 +12,8 @@ import { Observable } from 'rxjs';
 export class RoyalEstateApiProvider {
 
   private baseUrl = 'https://royal-estate-1c04e-default-rtdb.firebaseio.com/';
+  currentLocation: any = {};
+  private locationData = {};
 
   constructor(public http: HttpClient) {
     console.log('Hello RoyalEstateApiProvider Provider');
@@ -28,10 +30,27 @@ export class RoyalEstateApiProvider {
     return Observable.throw(err);
   }
 
-  getLoactionData(locaitonId) : Observable<any> {
+  getLoactionData(locaitonId, forceRefresh: boolean = false) : Observable<any> {//TODO refresh
+    if (!forceRefresh && this.locationData[locaitonId]) {
+      this.currentLocation = this.locationData[locaitonId];
+      return Observable.of(this.currentLocation);
+    }
+
     return this.http.get(`${this.baseUrl}/locations-data/${locaitonId}.json`)
-      .do(data => console.log('Location: ' + JSON.stringify(data)))
-      .catch(this.handleError);
+        .map(response => {
+          this.locationData[locaitonId] = response;
+          this.currentLocation = this.locationData[locaitonId];
+          return this.currentLocation;
+      });
+    }
+
+    getCurrentLocation(){
+      return this.currentLocation;
+    }
+  
+    refreshCurrentLocation() : Observable<any>{
+      console.log("Refresh current location "  )
+      return this.getLoactionData(this.currentLocation.location.id, true); 
     }
 
 }

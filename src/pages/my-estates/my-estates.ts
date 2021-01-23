@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, LoadingController, NavController, NavParams } from 'ionic-angular';
 import { RoyalEstateApiProvider } from '../../providers/royal-estate-api/royal-estate-api';
+import { UserSettingsProvider } from '../../providers/user-settings/user-settings';
 import { EstateHomePage } from '../estate-home/estate-home';
 import { LocationsPage } from '../pages';
 
@@ -18,10 +19,10 @@ import { LocationsPage } from '../pages';
   templateUrl: 'my-estates.html',
 })
 export class MyEstatesPage {
-
+//TODO - real data
   saved = [
     {
-      estate: {id: 1, refNumber: "00016", type: "Apartment", bedrooms: "2", region: "Lozenets", image: "https://firebasestorage.googleapis.com/v0/b/royal-estates-app.appspot.com/o/00001.jpg?alt=media&token=e38caf86-3aa2-4306-b119-046bf0aaf63e"},
+      estate: {id: 1, price: 10000, area: 55,address: "ul. 'Otets Paisiy' 42-44, 9000 Varna Center, Varna", refNumber: "00016", type: "Apartment", bedrooms: "2", region: "Lozenets", image: "https://firebasestorage.googleapis.com/v0/b/royal-estates-app.appspot.com/o/00001.jpg?alt=media&token=e38caf86-3aa2-4306-b119-046bf0aaf63e"},
       locationId: '3dd50aaf-6b03-4497-b074-d81703f07ee8',
       locationName: 'Sofia'
     },
@@ -35,10 +36,19 @@ export class MyEstatesPage {
   constructor(public navCtrl: NavController, 
               public navParams: NavParams,
               public loadingController: LoadingController,
-              public royalEstateApi: RoyalEstateApiProvider) {
+              public royalEstateApi: RoyalEstateApiProvider,
+              public userSettings: UserSettingsProvider) {
   }
 
   ionViewDidLoad() {
+    console.log(this.saved);
+
+    this.userSettings.getAllSaved().then(data => {
+      console.log("data");
+      console.log(data);
+      this.saved = data;
+    });
+
     console.log('ionViewDidLoad MyEstatesPage');
   }
 
@@ -47,11 +57,13 @@ export class MyEstatesPage {
   }
 
   savedTapped($event, saved){
+    console.log('savedTapped');
+
     let loader = this.loadingController.create({
         content: 'Getting data...'
     });
     loader.present();
-    this.royalEstateApi.getLoactionData(saved.locationtId) //TODO - check
+    this.royalEstateApi.getLoactionData(saved.locationId) //TODO - check
         .subscribe(l => {
             loader.dismiss();
             this.navCtrl.push(EstateHomePage, {estate: saved.estate});

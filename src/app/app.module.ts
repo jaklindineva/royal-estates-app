@@ -11,6 +11,10 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { EstateHomePage, EstatesPage, LocationsPage, MapPage, MyEstatesPage, OverviewPage, SimilarPage } from '../pages/pages';
 import { RoyalEstateApiProvider } from '../providers/royal-estate-api/royal-estate-api';
 import { HttpClientModule } from '@angular/common/http';
+import { IonicStorageModule } from '@ionic/storage';
+import { UserSettingsProvider } from '../providers/user-settings/user-settings';
+import { AgmCoreModule } from '@agm/core';
+
 
 @NgModule({
   declarations: [
@@ -29,6 +33,10 @@ import { HttpClientModule } from '@angular/common/http';
     BrowserModule,
     IonicModule.forRoot(MyApp),
     HttpClientModule,
+    IonicStorageModule.forRoot(),
+    AgmCoreModule.forRoot({
+      apiKey: 'AIzaSyApDyHfVZbbCjO0O1nf_pgv4YZf8RVqfmA'
+  })
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -47,7 +55,8 @@ import { HttpClientModule } from '@angular/common/http';
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    RoyalEstateApiProvider
+    RoyalEstateApiProvider,
+    UserSettingsProvider
   ]
 })
 export class AppModule {}
