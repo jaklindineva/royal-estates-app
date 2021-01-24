@@ -8,5 +8,59 @@
 </ion-header>
 
 <ion-content padding>
-  <h2>Similar</h2>
+  <ion-toolbar>
+    <ion-segment secondary [(ngModel)]="regionFilter" (ionChange)="filter()">
+        <ion-segment-button value="region">
+            Region
+        </ion-segment-button>
+        <ion-segment-button value="all">
+            All
+        </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+
+  <ion-card>
+    <ion-card-content>
+      <ion-item>
+        <ion-label>
+            Type Filter:
+        </ion-label>
+        <ion-toggle [(ngModel)]="useTypeFilter" (ionChange)="filter()"></ion-toggle>
+
+        <ion-select [(ngModel)]="typeFilter" multiple="false"  (ionChange)="filter()" [disabled]="!useTypeFilter">
+              <ion-option>Apartment</ion-option>
+              <ion-option>House</ion-option>
+              <ion-option>Studio</ion-option>
+        </ion-select>
+
+          
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-item-group *ngFor="let region of estates">
+    <ion-item-divider *ngIf="region.regionEstates.length != 0" color="secondary" >{{region.regionName}}</ion-item-divider>
+    <button ion-item *ngFor="let estate of region.regionEstates" (click)="itemTapped($event, estate)">
+      <ion-row>
+        <ion-col>
+          <div>
+            <ion-thumbnail>
+              <img [src]="estate.image">
+            </ion-thumbnail>
+          </div>
+        </ion-col>
+        <ion-col>
+          Ref No.{{estate.refNumber}}
+          <p>{{estate.type}}, {{estate.bedrooms}} bedrooms</p>
+          <br>
+          <p>{{selectedLocation.name}}, {{estate.region}}</p>
+        </ion-col>
+        <ion-col>
+          <br>
+          <br>
+          <h3 ion-text color="primary">VIEW</h3>
+        </ion-col>
+      </ion-row>
+    </button>
+  </ion-item-group>
 </ion-content>

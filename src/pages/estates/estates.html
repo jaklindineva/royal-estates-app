@@ -13,12 +13,7 @@
 <ion-content padding>
 
   <ion-item-group *ngFor="let region of estates">
-    <ion-item-divider color="secondary" >{{region.regionName}}</ion-item-divider>
-    <!--<button ion-item *ngFor="let estate of region.regionEstates" (click)="itemTapped($event, estate)">
-        Ref No.{{estate.refNumber}}
-        <p>{{estate.type}}, {{estate.bedrooms}}</p>
-        <p>{{selectedLocation.name}}, {{estate.region}}</p>
-    </button>-->
+    <ion-item-divider *ngIf="region.regionEstates.length != 0"  color="secondary" >{{region.regionName}}</ion-item-divider>
 
     <button ion-item *ngFor="let estate of region.regionEstates" (click)="itemTapped($event, estate)">
       <ion-row>
@@ -41,8 +36,6 @@
           <h3 ion-text color="primary">VIEW</h3>
         </ion-col>
       </ion-row>
-
     </button>
-
   </ion-item-group>
 </ion-content>

@@ -30,7 +30,7 @@ export class RoyalEstateApiProvider {
     return Observable.throw(err);
   }
 
-  getLoactionData(locaitonId, forceRefresh: boolean = false) : Observable<any> {//TODO refresh
+  getLoactionData(locaitonId, forceRefresh: boolean = false) : Observable<any> {
     if (!forceRefresh && this.locationData[locaitonId]) {
       this.currentLocation = this.locationData[locaitonId];
       return Observable.of(this.currentLocation);

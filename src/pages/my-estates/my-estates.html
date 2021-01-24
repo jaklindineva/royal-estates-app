@@ -21,10 +21,10 @@
 
 <ion-content>
 
-  <ion-card *ngIf="!saved">
+  <ion-card *ngIf="saved.length===0">
     <ion-card-header>No Saved Estates</ion-card-header>
     <ion-card-content>
-        <p>You don't have any saves estates yet.</p>
+        <p>You don't have any saved estates yet.</p>
         <p>First select a location, then you can save estates from their estate overview page.</p>
         <button ion-button (click)="goToLocations()" icon-left full>
             <ion-icon name="search"></ion-icon>
@@ -33,7 +33,7 @@
     </ion-card-content>
   </ion-card>
 
-<ion-card *ngIf="saved">
+<ion-card *ngIf="saved.length!=0">
   <ion-list>
     <ion-list-header>Saved Estates</ion-list-header>
 

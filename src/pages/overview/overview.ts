@@ -51,7 +51,7 @@ export class OverviewPage {
     });
   }
 
-  toggleSave(){ //TODO
+  toggleSave(){ 
     if(this.isSaved) {
       let confirm = this.alertController.create({
         title: "Remove from saved?",

@@ -15,8 +15,6 @@ export class UserSettingsProvider {
 
    saveEstate(estate, locationId, locationName) {
     let item = { estate: estate, locationId: locationId, locationName: locationName };
-    console.log("SAVE");
-    console.log(item);
     this.storage.set(estate.id.toString(), JSON.stringify(item));
 
   }
@@ -35,6 +33,7 @@ export class UserSettingsProvider {
         this.storage.forEach(data => {
             results.push(JSON.parse(data));
         });
+        console.log("ALL SAVED");
         console.log(results);
         return resolve(results);
     });

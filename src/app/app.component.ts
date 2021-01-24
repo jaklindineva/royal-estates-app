@@ -1,23 +1,26 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Nav, Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { HomePage } from '../pages/home/home';
 import { ListPage } from '../pages/list/list';
-import { LocationsPage, MyEstatesPage } from '../pages/pages';
+import { EstateHomePage, LocationsPage, MyEstatesPage } from '../pages/pages';
+import { UserSettingsProvider } from '../providers/user-settings/user-settings';
 
 @Component({
   templateUrl: 'app.html'
 })
-export class MyApp {
+export class MyApp  implements OnInit {
   @ViewChild(Nav) nav: Nav;
 
   rootPage: any = MyEstatesPage;
 
   pages: Array<{title: string, component: any}>;
 
-  constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen) {
+  saved = [];
+
+  constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen, public userSettings: UserSettingsProvider) {
     this.initializeApp();
 
     // used for an example of ngFor and navigation
@@ -26,6 +29,10 @@ export class MyApp {
       { title: 'List', component: ListPage }
     ];
 
+  }
+  ngOnInit(): void {
+    console.log("NG ON INTI");
+    this.userSettings.getAllSaved().then(data => this.saved = data);
   }
 
   initializeApp() {
@@ -45,5 +52,9 @@ export class MyApp {
 
   goToLocations() {
     this.nav.push(LocationsPage);
+  }
+
+  itemTapped($event, saved){
+    this.nav.push(EstateHomePage, {estate: saved.estate});
   }
 }
