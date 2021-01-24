@@ -8,7 +8,7 @@
   <ion-content>
     <ion-list>
       <button menuClose ion-item  (click)="goToLocations()">Find a Location</button>
-      <button ion-item *ngFor="let item of saved" (click)="itemTapped($event, item)">Ref. No {{item.estate.refNumber}}</button>
+      <button menuClose ion-item *ngFor="let item of saved" (click)="itemTapped($event, item)">Ref. No {{item.estate.refNumber}}</button>
     </ion-list>
   </ion-content>
 
