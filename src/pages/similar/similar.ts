@@ -3,6 +3,7 @@ import { IonicPage, LoadingController, NavController, NavParams } from 'ionic-an
 import { RoyalEstateApiProvider } from '../../providers/royal-estate-api/royal-estate-api';
 import * as _ from 'lodash';
 import { e } from '@angular/core/src/render3';
+import { EstateHomePage } from '../pages';
 
 /**
  * Generated class for the SimilarPage page.
@@ -49,54 +50,42 @@ export class SimilarPage {
     loader.present().then(() => {
       this.royalEstateApi.getLoactionData(this.selectedLocation.id).subscribe(data => {
         this.allEstates = data.estates;
-        // subdivide the estates into regions
-        this.allEstatesRegions =
-          _.chain(data.estates)
-          .groupBy('region')
-          .toPairs()
-          .map(item => _.zipObject(['regionName', 'regionEstates'], item))
-          .value();
-          this.allEstates = this.allEstatesRegions;
-          //this.filterRegion();
-          this.filter();
-
-          loader.dismiss();   
+        this.estates = data.estates;
+        this.filter();
+        loader.dismiss();   
       });
     }); 
   }
 
-  typeChanged(){
-    this.estates = this.allEstates;
-    this.filterRegion();
-
-    if(this.useTypeFilter) {
-      _.forEach(this.estates, r => {
-        r.regionEstates = _.filter(r.regionEstates, e => e.type === this.typeFilter);
-      });
-    } 
-  }
-
-  filterRegion(){
+  filter(){
     if(this.regionFilter === 'all') {
       this.estates = this.allEstates;
     } else {
-      this.estates = _.filter(this.allEstatesRegions, e => e.regionName === this.estate.region);
-    }
-  }
-
-  filter(){
-    if(this.regionFilter === 'all') {
-      this.estates = _.cloneDeep(this.allEstates);
-    } else {
-      let temp = _.cloneDeep(this.allEstatesRegions);
-      this.estates = _.filter(temp, e => e.regionName === this.estate.region);
+      this.estates = _.filter(this.allEstates, e => e.region === this.estate.region);
     }
 
     if(this.useTypeFilter) {
-      _.forEach(this.estates, r => {
-        r.regionEstates = _.filter(r.regionEstates, e => e.type === this.typeFilter);
-      });
+      this.estates = _.filter(this.estates, e => e.type === this.typeFilter);
     }
+  }
+
+  getHeader(record, recordIndex, records){
+    if (recordIndex === 0 || record.region !== records[recordIndex-1].region) {
+      return record.region;
+    }
+    return null;  
+  }
+
+  itemTapped($event, tapped){
+    let loader = this.loadingController.create({
+        content: 'Getting data...'
+    });
+    loader.present();
+    this.royalEstateApi.getLoactionData(this.royalEstateApi.getCurrentLocation().location.id)
+        .subscribe(l => {
+            loader.dismiss();
+            this.navCtrl.parent.parent.push(EstateHomePage, {estate: tapped});
+        });
   }
 
 }

@@ -38,29 +38,37 @@
     </ion-card-content>
   </ion-card>
 
-  <ion-item-group *ngFor="let region of estates">
-    <ion-item-divider *ngIf="region.regionEstates.length != 0" color="secondary" >{{region.regionName}}</ion-item-divider>
-    <button ion-item *ngFor="let estate of region.regionEstates" (click)="itemTapped($event, estate)">
-      <ion-row>
-        <ion-col>
-          <div>
-            <ion-thumbnail>
-              <img [src]="estate.image">
-            </ion-thumbnail>
-          </div>
-        </ion-col>
-        <ion-col>
-          Ref No.{{estate.refNumber}}
-          <p>{{estate.type}}, {{estate.bedrooms}} bedrooms</p>
-          <br>
-          <p>{{selectedLocation.name}}, {{estate.region}}</p>
-        </ion-col>
-        <ion-col>
-          <br>
-          <br>
-          <h3 ion-text color="primary">VIEW</h3>
-        </ion-col>
-      </ion-row>
-    </button>
-  </ion-item-group>
+
+
+  <ion-list [virtualScroll]="estates" [approxItemHeight]="'132px'" [headerFn]="getHeader">
+    <ion-item-divider color="secondary" *virtualHeader="let header">
+        {{header}}
+    </ion-item-divider>
+
+    <ion-item *virtualItem="let estate">
+     <!-- <button ion-item  (click)="itemTapped($event, estate)">-->
+        <ion-row>
+          <ion-col  >
+            <div>
+              <ion-thumbnail>
+                <img [src]="estate.image">
+              </ion-thumbnail>
+            </div>
+          </ion-col>
+          <ion-col >
+            Ref No.{{estate.refNumber}}
+            <p>{{estate.type}}, {{estate.bedrooms}} bedrooms</p>
+            <br>
+            <p>{{selectedLocation.name}}, {{estate.region}}</p>
+          </ion-col>
+          <ion-col >
+            <br>
+            <br>
+            <h3 float-right ion-text color="primary" (click)="itemTapped($event, estate)">VIEW</h3>
+          </ion-col>
+        </ion-row>
+      <!--</button>-->
+    </ion-item>
+  </ion-list>
+
 </ion-content>
